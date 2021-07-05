@@ -44,39 +44,40 @@ public class RegisterActivity extends AppCompatActivity {
             String password = passwordET.getText().toString();
             String email = emailET.getText().toString();
 
-            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email)){
-                Toast.makeText( RegisterActivity.this, "Please Fill All Fields",Toast.LENGTH_SHORT).show();
-            }else {
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email)) {
+                Toast.makeText(RegisterActivity.this, "Please Fill All Fields", Toast.LENGTH_SHORT).show();
+            } else {
                 registerNow(username, password, email);
             }
 
         });
 
         loginText.setOnClickListener(v -> {
-            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(i);
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            finish();
         });
     }
 
-    private void registerNow(String username, String password, String email){
-        auth.createUserWithEmailAndPassword(email,password)
+    private void registerNow(final String username, String password, String email) {
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
+
+                    if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = auth.getCurrentUser();
                         assert firebaseUser != null;
                         String userid = firebaseUser.getUid();
 
                         myRef = FirebaseDatabase.getInstance().getReference("MyUsers").child(userid);
 
-                        HashMap<String,String> hashMap = new HashMap<>();
-                        hashMap.put("id",userid);
-                        hashMap.put("username",username);
-                        hashMap.put("imageURl","default");
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("id", userid);
+                        hashMap.put("username", username);
+                        hashMap.put("imageURl", "default");
 
                         myRef.setValue(hashMap).addOnCompleteListener(task1 -> {
 
-                            if (task1.isSuccessful()){
-                                Intent i = new Intent(RegisterActivity.this,MainActivity.class);
+                            if (task1.isSuccessful()) {
+                                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(i);
                                 finish();
@@ -84,8 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                         });
 
-                    }else {
-                        Toast.makeText( RegisterActivity.this, "Invalid Email or Password",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Invalid Email or Password", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
