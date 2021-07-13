@@ -1,16 +1,16 @@
 package com.example.chatapp.model;
 
-public class Users {
+public class User {
 
-    private  String id;
+    private String id;
     private String username;
     private String imageURL;
 
-    public Users(){
-
+    public User() {
+        // Required empty public constructor
     }
 
-    public Users(String id, String username, String imageURL) {
+    public User(String id, String username, String imageURL) {
         this.id = id;
         this.username = username;
         this.imageURL = imageURL;

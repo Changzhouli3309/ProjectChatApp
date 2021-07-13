@@ -1,22 +1,20 @@
 package com.example.chatapp;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.example.chatapp.adapters.ViewPagerAdapter;
 import com.example.chatapp.fragments.ChatsFragment;
 import com.example.chatapp.fragments.UsersFragment;
-import com.example.chatapp.model.Users;
+import com.example.chatapp.model.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,8 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        myRef = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        myRef = FirebaseDatabase.getInstance().getReference("MyUsers").child(firebaseUser.getUid());
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Users users = snapshot.getValue(Users.class);
-                Toast.makeText(MainActivity.this, ("Welcome " + users.getUsername()), Toast.LENGTH_SHORT).show();
+                User user = snapshot.getValue(User.class);
+                assert user != null;
+                Toast.makeText(MainActivity.this, ("Welcome " + user.getUsername()), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -54,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //create Viewpage
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -63,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(new UsersFragment(), "Users");
 
         viewPager.setAdapter(viewPagerAdapter);
-
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -74,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -86,37 +84,5 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private ArrayList<Fragment> fragments;
-        private ArrayList<String> titles;
 
-        ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-            this.fragments = new ArrayList<>();
-            this.titles = new ArrayList<>();
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            fragments.add(fragment);
-            titles.add(title);
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles.get(position);
-        }
-    }
 }

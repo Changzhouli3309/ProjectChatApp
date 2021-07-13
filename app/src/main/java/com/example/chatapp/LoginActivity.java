@@ -15,10 +15,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //widgets
     EditText emailETlogin, passwordETlogin;
     Button loginBtn;
     TextView registerText;
 
+    //Firebase
     FirebaseAuth auth;
     FirebaseUser firebaseUser;
 
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //widgets
         emailETlogin = findViewById(R.id.editTextTextEmailAddress);
         passwordETlogin = findViewById(R.id.editTextTextPassword);
         loginBtn = findViewById(R.id.buttonLogin);
@@ -45,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //firebase
         auth = FirebaseAuth.getInstance();
+
 
         loginBtn.setOnClickListener(v -> {
             String email = emailETlogin.getText().toString();
@@ -57,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //swap page to register
         registerText.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             finish();

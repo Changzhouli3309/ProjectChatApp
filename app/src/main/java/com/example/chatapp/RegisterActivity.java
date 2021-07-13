@@ -19,10 +19,12 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    //widget
     EditText nameET, passwordET, emailET;
     Button registerBtn;
     TextView loginText;
 
+    //Firebase
     FirebaseAuth auth;
     DatabaseReference myRef;
 
@@ -31,12 +33,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //widget
         nameET = findViewById(R.id.editTextUserName);
         passwordET = findViewById(R.id.editTextPassword);
         emailET = findViewById(R.id.editTextEmailAddress);
         registerBtn = findViewById(R.id.buttonRegister);
         loginText = findViewById(R.id.textViewToLogin);
 
+        //Firebase
         auth = FirebaseAuth.getInstance();
 
         registerBtn.setOnClickListener(v -> {
@@ -52,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
+        //swap page to login
         loginText.setOnClickListener(v -> {
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             finish();
@@ -72,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("id", userid);
                         hashMap.put("username", username);
-                        hashMap.put("imageURl", "default");
+                        hashMap.put("imageURL", "default");
 
                         myRef.setValue(hashMap).addOnCompleteListener(task1 -> {
 
