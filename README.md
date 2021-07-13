@@ -6,6 +6,6 @@ a android app for chat with Firebase account and database
 Account for test:
 
 Email: tester(1-3)@test.com \
-Password: 123456 \
+Password: 123456 
 
-or you can make new account with registration.
+\or you can make new account with registration.
